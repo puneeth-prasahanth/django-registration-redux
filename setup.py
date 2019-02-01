@@ -9,9 +9,9 @@ from registration import get_version
 
 setup(name="django-registration-redux",
                  version=get_version().replace(' ', '-'),
-                 author='Andrew Cutler',
+                 author='puneeth prashnath',
                 author_email='puneeth.prashant@gmail.com',
-                url='https://github.com/macropin/django-registration',
+                url='https://github.com/puneeth-prasahanth/django-registration-redux',
                 package_dir={'registration': 'registration'},
                 packages=find_packages(),
 
