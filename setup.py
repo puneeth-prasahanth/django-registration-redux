@@ -1,10 +1,11 @@
-import sys
+import sys,os
 import setuptools
+from registration import get_version
 from setuptools import find_packages
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
-from registration import get_version
+
 
 
 setup(name="django-registration-redux",
