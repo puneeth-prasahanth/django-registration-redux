@@ -1,49 +1,39 @@
-import sys,os
-import setuptools
-import registration
-from registration import get_version
+import sys
+
 from setuptools import find_packages
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
-##############
-#VERSION = (1, 1, 0, 'final', 0)
-#
-#
-#def get_version():
-#    "Returns a PEP 386-compliant version number from VERSION."
-#    assert len(VERSION) == 5
-#    assert VERSION[3] in ('alpha', 'beta', 'rc', 'final')
-#
-#    # Now build the two parts of the version number:
-#    # main = X.Y[.Z]
-#    # sub = .devN - for pre-alpha releases
-#    #     | {a|b|c}N - for alpha, beta and rc releases
-#
-#    parts = 2 if VERSION[2] == 0 else 3
-#    main = '.'.join(str(x) for x in VERSION[:parts])
-#
-#    sub = ''
-#    if VERSION[3] != 'final':
-#        mapping = {'alpha': 'a', 'beta': 'b', 'rc': 'c'}
-#        sub = mapping[VERSION[3]] + str(VERSION[4])
-#
-#    return str(main + sub)
-#
-#############
+from registration import get_version
 
 
+class PyTest(TestCommand):
+
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        # import here, cause outside the eggs aren't loaded
+        import pytest
+        errno = pytest.main(self.test_args)
+        sys.exit(errno)
 
 
-setup(name="django-registration-redux",
-                 version=get_version().replace(' ', '-'),
-                 author='puneeth prashnath',
-                author_email='puneeth.prashant@gmail.com',
-                url='https://github.com/puneeth-prasahanth/django-registration-redux',
-                package_dir={'registration': 'registration'},
-                packages=find_packages(),
-
-                  include_package_data=True,
+setup(
+    name='django-registration-redux',
+    version=get_version().replace(' ', '-'),
+    description='An extensible user-registration application for Django',
+    long_description=open('README.rst').read(),
+    author='Puneeth',
+    author_email='puneeth.prashant@gmail.com',
+    url='https://github.com/puneeth-prasahanth/django-registration',
+    package_dir={'registration': 'registration'},
+    packages=find_packages(exclude='test_app'),
+    tests_require=['pytest-django'],
+    cmdclass={'test': PyTest},
+    include_package_data=True,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
@@ -64,8 +54,5 @@ setup(name="django-registration-redux",
         'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities'
-    ],)
-
-
-
-
+    ],
+)
